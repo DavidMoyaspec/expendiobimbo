@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8fa">
+    <meta name="description" content="Sistema de gestión de inventario por lotes y punto de venta para un expendio de pan.">
+    <title>BimboStock | Gestión de expendio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#" aria-label="BimboStock inicio" data-view-link="dashboard">
+          <span class="brand-mark">B</span>
+          <span class="brand-copy"><strong>BimboStock</strong><small>CONTROL DE EXPENDIO</small></span>
+        </a>
+        <div class="store-switcher">
+          <span class="store-icon">⌂</span>
+          <span><strong>Expendio Centro</strong><small>Sucursal principal</small></span>
+          <span class="chevron">⌄</span>
+        </div>
+        <p class="nav-label">MENÚ PRINCIPAL</p>
+        <nav class="main-nav" aria-label="Navegación principal">
+          <button class="nav-link active" data-view-link="dashboard"><span class="nav-icon">▦</span>Panel general</button>
+          <button class="nav-link" data-view-link="inventory"><span class="nav-icon">▤</span>Inventario <span class="nav-count" id="nav-expiring-count">0</span></button>
+          <button class="nav-link" data-view-link="pos"><span class="nav-icon">▣</span>Punto de venta</button>
+          <button class="nav-link" data-view-link="sales"><span class="nav-icon">↗</span>Ventas</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="peps-note"><span class="peps-badge">PEPS</span><strong>Rotación inteligente</strong><p>Primero en entrar, primero en salir. Cada venta descuenta los lotes más antiguos.</p></div>
+          <div class="user-profile"><span class="avatar">AM</span><span><strong>Alex Martínez</strong><small>Administrador</small></span><button class="more-button" aria-label="Más opciones">···</button></div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu icon-button" id="menu-toggle" aria-label="Abrir menú">☰</button>
+          <div class="breadcrumb"><span>Expendio Centro</span><span class="crumb-divider">/</span><strong id="page-breadcrumb">Panel general</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label" id="today-label"></span>
+            <button class="icon-button notification-button" aria-label="Notificaciones" data-view-link="inventory">♧<i></i></button>
+            <span class="top-avatar">AM</span>
+          </div>
+        </header>
+
+        <div class="page-wrap">
+          <section class="view-section active" id="view-dashboard">
+            <div class="page-heading">
+              <div><p class="eyebrow" id="dashboard-date-label"></p><h1>¡Hola, Alex! <span class="wave">✳</span></h1><p class="subheading">Aquí tienes el resumen de tu expendio hoy.</p></div>
+              <button class="button button-primary" data-view-link="pos"><span>＋</span> Nueva venta</button>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card"><div class="stat-top"><span>Valor del inventario</span><span class="stat-icon blue">◈</span></div><strong class="stat-value" id="stat-inventory-value">$0.00</strong><div class="stat-foot"><span class="stat-dot blue-dot"></span><span id="stat-units">0 unidades en stock</span></div></article>
+              <article class="stat-card"><div class="stat-top"><span>Ventas de hoy</span><span class="stat-icon green">↗</span></div><strong class="stat-value" id="stat-sales">$0.00</strong><div class="stat-foot"><span class="positive-change">●</span><span id="stat-orders">0 tickets registrados</span></div></article>
+              <article class="stat-card"><div class="stat-top"><span>Productos activos</span><span class="stat-icon violet">▤</span></div><strong class="stat-value" id="stat-products">0</strong><div class="stat-foot"><span class="stat-dot violet-dot"></span><span>En tu catálogo</span></div></article>
+              <article class="stat-card warning-card"><div class="stat-top"><span>Por caducar pronto</span><span class="stat-icon amber">◷</span></div><strong class="stat-value" id="stat-expiring">0</strong><div class="stat-foot"><span class="warning-text">Próximos 30 días</span><button class="text-link" data-view-link="inventory">Ver lotes →</button></div></article>
+            </div>
+
+            <div class="dashboard-grid">
+              <article class="panel sales-panel">
+                <div class="panel-heading"><div><h2>Resumen de ventas</h2><p>Rendimiento de los últimos 7 días</p></div><span class="select-display">Esta semana⌄</span></div>
+                <div class="sales-summary"><strong id="week-sales">$0.00</strong><span class="summary-caption">VENTAS TOTALES</span><span class="summary-growth">↑ <b>Actividad reciente</b></span></div>
+                <div class="chart-wrap"><div class="chart-y-axis"><span>$3k</span><span>$2k</span><span>$1k</span><span>$0</span></div><div class="chart-area"><div class="chart-grid-lines"><i></i><i></i><i></i><i></i></div><svg viewBox="0 0 700 180" preserveAspectRatio="none" role="img" aria-label="Gráfica de ventas de los últimos siete días"><defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#2876df" stop-opacity=".18"/><stop offset="100%" stop-color="#2876df" stop-opacity="0"/></linearGradient></defs><path id="chart-fill" class="chart-fill" d=""/><path id="chart-line" class="chart-line" d=""/></svg><div class="chart-x-axis" id="chart-labels"></div></div></div>
+              </article>
+              <article class="panel expiry-panel">
+                <div class="panel-heading"><div><h2>Estado de caducidades</h2><p>Semáforo de frescura</p></div><button class="more-button" aria-label="Más opciones">···</button></div>
+                <div class="expiry-visual"><div class="donut" id="expiry-donut"><div class="donut-inner"><strong id="expiry-lots-total">0</strong><span>lotes</span></div></div><div class="expiry-legend"><div><span class="legend-dot green-dot"></span><span>En buen estado</span><strong id="expiry-green">0</strong></div><div><span class="legend-dot yellow-dot"></span><span>Por caducar</span><strong id="expiry-yellow">0</strong></div><div><span class="legend-dot red-dot"></span><span>Caducidad crítica</span><strong id="expiry-red">0</strong></div></div></div>
+                <div class="expiry-foot"><span class="status-pulse"></span>Actualizado en tiempo real</div>
+              </article>
+            </div>
+
+            <div class="lower-grid">
+              <article class="panel lots-panel">
+                <div class="panel-heading"><div><h2>Lotes por vencer</h2><p>Prioriza la rotación de estos productos</p></div><button class="text-link" data-view-link="inventory">Ver inventario →</button></div>
+                <div class="table-scroll"><table><thead><tr><th>PRODUCTO / LOTE</th><th>STOCK</th><th>CADUCA EN</th><th>ESTADO</th></tr></thead><tbody id="dashboard-expiring-rows"></tbody></table></div>
+                <div class="empty-state hidden" id="dashboard-expiring-empty">No hay lotes próximos a caducar. ¡Buen trabajo!</div>
+              </article>
+              <article class="panel quick-pos-panel"><div class="quick-pos-art"><span>☼</span><i>✳</i><b>↗</b></div><div><span class="eyebrow">TODO LISTO PARA VENDER</span><h2>Tu mostrador, en un clic</h2><p>Registra una venta y deja que PEPS elija automáticamente el lote correcto.</p><button class="button button-dark" data-view-link="pos">Abrir punto de venta <span>→</span></button></div></article>
+            </div>
+          </section>
+
+          <section class="view-section" id="view-inventory">
+            <div class="page-heading"><div><p class="eyebrow">CONTROL DE EXISTENCIAS</p><h1>Inventario</h1><p class="subheading">Cada lote cuenta. Controla entradas, stock y fechas de caducidad.</p></div><button class="button button-primary" id="open-lot-modal"><span>＋</span> Registrar lote</button></div>
+            <div class="inventory-summary" id="inventory-summary"></div>
+            <article class="panel inventory-panel">
+              <div class="panel-heading inventory-toolbar"><div><h2>Lotes registrados</h2><p>Semáforo: verde +30 días · amarillo 8–30 · rojo 0–7 o caducado</p></div><label class="search-field"><span>⌕</span><input id="inventory-search" type="search" placeholder="Buscar producto o lote..." aria-label="Buscar producto o lote"></label></div>
+              <div class="table-scroll"><table class="inventory-table"><thead><tr><th>PRODUCTO</th><th>LOTE</th><th>ENTRADA</th><th>CADUCIDAD</th><th>STOCK</th><th>ESTADO</th><th></th></tr></thead><tbody id="inventory-rows"></tbody></table></div>
+              <div class="empty-state hidden" id="inventory-empty">No se encontraron lotes. Registra uno nuevo para comenzar.</div>
+            </article>
+            <p class="peps-explainer"><span class="peps-badge">PEPS</span> Al cobrar una venta, el sistema descuenta primero el stock del lote con la fecha de entrada más antigua.</p>
+          </section>
+
+          <section class="view-section" id="view-pos">
+            <div class="page-heading"><div><p class="eyebrow">CAJA · EXPENDIO CENTRO</p><h1>Punto de venta</h1><p class="subheading">Agrega productos al ticket. El descuento de lotes es automático por PEPS.</p></div><span class="open-register"><i></i> Caja abierta</span></div>
+            <div class="pos-layout">
+              <div class="pos-catalog panel">
+                <div class="catalog-toolbar"><div><h2>Productos</h2><p>Selecciona para agregar al ticket</p></div><label class="search-field"><span>⌕</span><input id="pos-search" type="search" placeholder="Buscar producto..." aria-label="Buscar producto"></label></div>
+                <div class="category-tabs"><button class="category-tab active" data-category="Todos">Todos</button><button class="category-tab" data-category="Pan dulce">Pan dulce</button><button class="category-tab" data-category="Pan de caja">Pan de caja</button><button class="category-tab" data-category="Botanas">Botanas</button></div>
+                <div class="product-grid" id="pos-products"></div>
+                <div class="empty-state hidden" id="pos-empty">No hay productos disponibles con esa búsqueda.</div>
+              </div>
+              <aside class="cart-panel panel">
+                <div class="cart-heading"><div><h2>Venta actual</h2><p id="cart-date"></p></div><span class="cart-count" id="cart-count">0</span></div>
+                <div class="cart-items" id="cart-items"></div>
+                <div class="cart-empty" id="cart-empty"><span>▣</span><strong>Tu ticket está vacío</strong><p>Agrega productos del catálogo para comenzar una venta.</p></div>
+                <div class="cart-bottom"><div class="cart-total-row"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div><div class="cart-total-row"><span>IVA</span><strong>Incluido</strong></div><div class="cart-grand-total"><span>Total</span><strong id="cart-total">$0.00</strong></div><label class="payment-label" for="payment-method">Método de pago</label><select id="payment-method"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option></select><button class="button button-primary checkout-button" id="checkout-button" disabled>Cobrar <span id="checkout-total">$0.00</span></button><p class="peps-hint">↻ Descuento automático de lotes por PEPS</p></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="view-section" id="view-sales">
+            <div class="page-heading"><div><p class="eyebrow">HISTORIAL DE OPERACIONES</p><h1>Ventas</h1><p class="subheading">Consulta los tickets generados en este expendio.</p></div><button class="button button-primary" data-view-link="pos"><span>＋</span> Nueva venta</button></div>
+            <article class="panel sales-history-panel"><div class="panel-heading"><div><h2>Tickets registrados</h2><p>Las ventas se guardan en este dispositivo.</p></div><span class="history-count" id="sales-history-count">0 tickets</span></div><div class="table-scroll"><table><thead><tr><th>TICKET</th><th>FECHA Y HORA</th><th>PRODUCTOS</th><th>PAGO</th><th>TOTAL</th></tr></thead><tbody id="sales-rows"></tbody></table></div><div class="empty-state hidden" id="sales-empty">Aún no hay ventas registradas.</div></article>
+          </section>
+        </div>
+        <footer class="app-footer"><span>© 2026 BimboStock · Gestión de expendio</span><span><i></i> Datos guardados localmente</span></footer>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="lot-modal" role="dialog" aria-modal="true" aria-labelledby="lot-modal-title">
+      <form class="modal-card" id="lot-form">
+        <div class="modal-heading"><div><p class="eyebrow">CONTROL DE INVENTARIO</p><h2 id="lot-modal-title">Registrar nuevo lote</h2></div><button type="button" class="icon-button close-modal" id="close-lot-modal" aria-label="Cerrar">×</button></div>
+        <p class="modal-description">Captura los datos del producto y su lote para dar entrada al inventario.</p>
+        <div class="form-grid">
+          <label class="form-field span-2">Nombre del producto<input name="name" required maxlength="60" placeholder="Ej. Pan Blanco Grande"></label>
+          <label class="form-field">SKU / código<input name="sku" required maxlength="20" placeholder="Ej. BIM-001"></label>
+          <label class="form-field">Categoría<select name="category" required><option>Pan de caja</option><option>Pan dulce</option><option>Botanas</option><option>Otros</option></select></label>
+          <label class="form-field">Número de lote<input name="lot" required maxlength="24" placeholder="Ej. L-2026-101"></label>
+          <label class="form-field">Unidades recibidas<input name="qty" required type="number" min="1" step="1" placeholder="24"></label>
+          <label class="form-field">Fecha de entrada<input name="receivedAt" required type="date"></label>
+          <label class="form-field">Fecha de caducidad<input name="expiresAt" required type="date"></label>
+          <label class="form-field">Precio de venta (MXN)<input name="price" required type="number" min="0.01" step="0.01" placeholder="48.00"></label>
+          <label class="form-field">Costo unitario (MXN)<input name="cost" required type="number" min="0" step="0.01" placeholder="32.00"></label>
+        </div>
+        <p class="form-error hidden" id="lot-form-error" role="alert"></p>
+        <div class="modal-actions"><button type="button" class="button button-light" id="cancel-lot-modal">Cancelar</button><button type="submit" class="button button-primary">Guardar lote</button></div>
+      </form>
+    </div>
+    <div class="toast hidden" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
