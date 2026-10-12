@@ -10,3 +10,11 @@ dist/
 coverage/
 *.log
 .vs/
+
+# Configuración y datos locales del backend
+instance/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
