@@ -17,6 +17,15 @@ body { margin: 0; background: var(--canvas); color: var(--ink); font-size: 14px;
 button, input, select { font: inherit; }
 button { cursor: pointer; }
 .app-shell { min-height: 100vh; }
+.auth-screen { display: grid; place-items: center; min-height: 100vh; padding: 24px; background: radial-gradient(circle at 50% 10%, #edf4ff, transparent 38%), var(--canvas); }
+.auth-card { display: grid; gap: 14px; width: min(100%, 390px); padding: 30px; border: 1px solid #ebeff3; border-radius: 14px; background: white; box-shadow: 0 12px 40px #29384b0b; }
+.auth-brand { margin: 0 0 8px; }
+.auth-card .eyebrow, .auth-card h1, .auth-card .subheading { margin-bottom: 0; }
+.auth-card .form-field { gap: 7px; }
+.auth-card .form-field input { min-height: 42px; padding: 10px; }
+.auth-card > .button { min-height: 42px; margin-top: 4px; font-size: 12px; }
+.logout-button { padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: white; color: #697382; font-size: 9px; font-weight: 700; }
+.inventory-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .sidebar { width: 250px; position: fixed; inset: 0 auto 0 0; z-index: 5; display: flex; flex-direction: column; padding: 25px 16px 16px; background: #fff; border-right: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 11px; margin: 0 0 30px 6px; color: inherit; text-decoration: none; }
 .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px 12px 12px 4px; background: #eaf2ff; color: #1265cc; font: 800 22px Manrope, sans-serif; }

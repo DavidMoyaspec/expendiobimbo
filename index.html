@@ -12,7 +12,22 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div class="app-shell">
+    <main class="auth-screen" id="auth-screen">
+      <form class="auth-card" id="login-form">
+        <a class="brand auth-brand" href="#" aria-label="BimboStock">
+          <span class="brand-mark">B</span>
+          <span class="brand-copy"><strong>BimboStock</strong><small>CONTROL DE EXPENDIO</small></span>
+        </a>
+        <p class="eyebrow">ACCESO SEGURO</p>
+        <h1>Inicia sesión</h1>
+        <p class="subheading">Ingresa con la cuenta asignada a tu puesto.</p>
+        <label class="form-field">Usuario<input name="username" autocomplete="username" required maxlength="80"></label>
+        <label class="form-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="1024"></label>
+        <p class="form-error hidden" id="login-error" role="alert"></p>
+        <button class="button button-primary" type="submit" id="login-button">Iniciar sesión</button>
+      </form>
+    </main>
+    <div class="app-shell hidden" id="app-shell">
       <aside class="sidebar" id="sidebar">
         <a class="brand" href="#" aria-label="BimboStock inicio" data-view-link="dashboard">
           <span class="brand-mark">B</span>
@@ -25,14 +40,14 @@
         </div>
         <p class="nav-label">MENÚ PRINCIPAL</p>
         <nav class="main-nav" aria-label="Navegación principal">
-          <button class="nav-link active" data-view-link="dashboard"><span class="nav-icon">▦</span>Panel general</button>
-          <button class="nav-link" data-view-link="inventory"><span class="nav-icon">▤</span>Inventario <span class="nav-count" id="nav-expiring-count">0</span></button>
+          <button class="nav-link active" data-view-link="dashboard" data-role="admin"><span class="nav-icon">▦</span>Panel general</button>
+          <button class="nav-link" data-view-link="inventory" data-role="admin"><span class="nav-icon">▤</span>Inventario <span class="nav-count" id="nav-expiring-count">0</span></button>
           <button class="nav-link" data-view-link="pos"><span class="nav-icon">▣</span>Punto de venta</button>
-          <button class="nav-link" data-view-link="sales"><span class="nav-icon">↗</span>Ventas</button>
+          <button class="nav-link" data-view-link="sales" data-role="admin"><span class="nav-icon">↗</span>Ventas</button>
         </nav>
         <div class="sidebar-bottom">
           <div class="peps-note"><span class="peps-badge">PEPS</span><strong>Rotación inteligente</strong><p>Primero en entrar, primero en salir. Cada venta descuenta los lotes más antiguos.</p></div>
-          <div class="user-profile"><span class="avatar">AM</span><span><strong>Alex Martínez</strong><small>Administrador</small></span><button class="more-button" aria-label="Más opciones">···</button></div>
+          <div class="user-profile"><span class="avatar" id="user-avatar">BS</span><span><strong id="user-name"></strong><small id="user-role"></small></span><button class="logout-button" id="logout-button" type="button">Salir</button></div>
         </div>
       </aside>
 
@@ -42,15 +57,15 @@
           <div class="breadcrumb"><span>Expendio Centro</span><span class="crumb-divider">/</span><strong id="page-breadcrumb">Panel general</strong></div>
           <div class="topbar-actions">
             <span class="today-label" id="today-label"></span>
-            <button class="icon-button notification-button" aria-label="Notificaciones" data-view-link="inventory">♧<i></i></button>
-            <span class="top-avatar">AM</span>
+            <button class="icon-button notification-button" aria-label="Notificaciones" data-view-link="inventory" data-role="admin">♧<i></i></button>
+            <span class="top-avatar" id="top-avatar">BS</span>
           </div>
         </header>
 
         <div class="page-wrap">
-          <section class="view-section active" id="view-dashboard">
+          <section class="view-section active" id="view-dashboard" data-role="admin">
             <div class="page-heading">
-              <div><p class="eyebrow" id="dashboard-date-label"></p><h1>¡Hola, Alex! <span class="wave">✳</span></h1><p class="subheading">Aquí tienes el resumen de tu expendio hoy.</p></div>
+              <div><p class="eyebrow" id="dashboard-date-label"></p><h1>¡Hola, <span id="welcome-name"></span>! <span class="wave">✳</span></h1><p class="subheading">Aquí tienes el resumen de tu expendio hoy.</p></div>
               <button class="button button-primary" data-view-link="pos"><span>＋</span> Nueva venta</button>
             </div>
             <div class="stats-grid">
@@ -83,12 +98,12 @@
             </div>
           </section>
 
-          <section class="view-section" id="view-inventory">
-            <div class="page-heading"><div><p class="eyebrow">CONTROL DE EXISTENCIAS</p><h1>Inventario</h1><p class="subheading">Cada lote cuenta. Controla entradas, stock y fechas de caducidad.</p></div><button class="button button-primary" id="open-lot-modal"><span>＋</span> Registrar lote</button></div>
+          <section class="view-section" id="view-inventory" data-role="admin">
+            <div class="page-heading"><div><p class="eyebrow">CONTROL DE EXISTENCIAS</p><h1>Inventario</h1><p class="subheading">Cada lote cuenta. Controla entradas, stock y fechas de caducidad.</p></div><div class="inventory-actions"><button class="button button-light" id="open-product-modal">Editar producto/precio</button><button class="button button-primary" id="open-lot-modal"><span>＋</span> Registrar lote</button></div></div>
             <div class="inventory-summary" id="inventory-summary"></div>
             <article class="panel inventory-panel">
               <div class="panel-heading inventory-toolbar"><div><h2>Lotes registrados</h2><p>Semáforo: verde +30 días · amarillo 8–30 · rojo 0–7 o caducado</p></div><label class="search-field"><span>⌕</span><input id="inventory-search" type="search" placeholder="Buscar producto o lote..." aria-label="Buscar producto o lote"></label></div>
-              <div class="table-scroll"><table class="inventory-table"><thead><tr><th>PRODUCTO</th><th>LOTE</th><th>ENTRADA</th><th>CADUCIDAD</th><th>STOCK</th><th>ESTADO</th><th></th></tr></thead><tbody id="inventory-rows"></tbody></table></div>
+              <div class="table-scroll"><table class="inventory-table"><thead><tr><th>PRODUCTO</th><th>LOTE</th><th>ENTRADA</th><th>CADUCIDAD</th><th>STOCK</th><th>PRECIO</th><th>ESTADO</th><th></th></tr></thead><tbody id="inventory-rows"></tbody></table></div>
               <div class="empty-state hidden" id="inventory-empty">No se encontraron lotes. Registra uno nuevo para comenzar.</div>
             </article>
             <p class="peps-explainer"><span class="peps-badge">PEPS</span> Al cobrar una venta, el sistema descuenta primero el stock del lote con la fecha de entrada más antigua.</p>
@@ -112,12 +127,12 @@
             </div>
           </section>
 
-          <section class="view-section" id="view-sales">
+          <section class="view-section" id="view-sales" data-role="admin">
             <div class="page-heading"><div><p class="eyebrow">HISTORIAL DE OPERACIONES</p><h1>Ventas</h1><p class="subheading">Consulta los tickets generados en este expendio.</p></div><button class="button button-primary" data-view-link="pos"><span>＋</span> Nueva venta</button></div>
-            <article class="panel sales-history-panel"><div class="panel-heading"><div><h2>Tickets registrados</h2><p>Las ventas se guardan en este dispositivo.</p></div><span class="history-count" id="sales-history-count">0 tickets</span></div><div class="table-scroll"><table><thead><tr><th>TICKET</th><th>FECHA Y HORA</th><th>PRODUCTOS</th><th>PAGO</th><th>TOTAL</th></tr></thead><tbody id="sales-rows"></tbody></table></div><div class="empty-state hidden" id="sales-empty">Aún no hay ventas registradas.</div></article>
+            <article class="panel sales-history-panel"><div class="panel-heading"><div><h2>Tickets registrados</h2><p>Las ventas se consultan desde la base de datos del servidor.</p></div><span class="history-count" id="sales-history-count">0 tickets</span></div><div class="table-scroll"><table><thead><tr><th>TICKET</th><th>FECHA Y HORA</th><th>CAJERO</th><th>PRODUCTOS</th><th>PAGO</th><th>TOTAL</th></tr></thead><tbody id="sales-rows"></tbody></table></div><div class="empty-state hidden" id="sales-empty">Aún no hay ventas registradas.</div></article>
           </section>
         </div>
-        <footer class="app-footer"><span>© 2026 BimboStock · Gestión de expendio</span><span><i></i> Datos guardados localmente</span></footer>
+        <footer class="app-footer"><span>© 2026 BimboStock · Gestión de expendio</span><span><i></i> Datos sincronizados con el servidor</span></footer>
       </main>
     </div>
 
@@ -140,7 +155,22 @@
         <div class="modal-actions"><button type="button" class="button button-light" id="cancel-lot-modal">Cancelar</button><button type="submit" class="button button-primary">Guardar lote</button></div>
       </form>
     </div>
+    <div class="modal-backdrop hidden" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+      <form class="modal-card" id="product-form">
+        <div class="modal-heading"><div><p class="eyebrow">CATÁLOGO</p><h2 id="product-modal-title">Editar producto y precio</h2></div><button type="button" class="icon-button close-modal" id="close-product-modal" aria-label="Cerrar">×</button></div>
+        <p class="modal-description">Este cambio actualiza el catálogo y el precio usado en ventas futuras.</p>
+        <div class="form-grid">
+          <label class="form-field span-2">Producto<select name="sku" id="product-select" required></select></label>
+          <label class="form-field span-2">Nombre<input name="name" id="product-name" required maxlength="60"></label>
+          <label class="form-field">Categoría<select name="category" id="product-category" required><option>Pan de caja</option><option>Pan dulce</option><option>Botanas</option><option>Otros</option></select></label>
+          <label class="form-field">Precio de venta (MXN)<input name="price" id="product-price" required type="number" min="0.01" step="0.01"></label>
+        </div>
+        <p class="form-error hidden" id="product-form-error" role="alert"></p>
+        <div class="modal-actions"><button type="button" class="button button-light" id="cancel-product-modal">Cancelar</button><button type="submit" class="button button-primary" id="save-product-button">Guardar cambios</button></div>
+      </form>
+    </div>
     <div class="toast hidden" id="toast" role="status"></div>
+    <script src="config.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
